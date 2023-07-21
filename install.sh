@@ -30,7 +30,7 @@ chown -R $username:$username /home/$username
 # Installing Essential Programs 
 nala install feh kitty rofi picom thunar nitrogen lxpolkit x11-xserver-utils unzip wget pulseaudio pavucontrol build-essential libx11-dev libxft-dev libxinerama-dev -y
 # Installing Other less important Programs
-nala install neofetch flameshot psmisc mangohud vim lxappearance papirus-icon-theme lxappearance fonts-noto-color-emoji lightdm -y
+nala install neofetch flameshot psmisc mangohud vim lxappearance papirus-icon-theme lxappearance fonts-noto-color-emoji gnome-core -y
 
 # Download Nordic Theme
 cd /usr/share/themes/
@@ -65,13 +65,22 @@ echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=
 nala update
 nala install brave-browser -y
 
+# Install VSC
+
+sudo apt-get install wget gpg
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+rm -f packages.microsoft.gpg
+nala update
+nala install code
+
 # Enable graphical login and change target from CLI to GUI
-systemctl enable lightdm
+systemctl enable gdm3
 systemctl set-default graphical.target
 
 # Beautiful bash
-git clone https://github.com/ChrisTitusTech/mybash
-cd mybash
+cd $builddir/github/mybash
 bash setup.sh
 cd $builddir
 
